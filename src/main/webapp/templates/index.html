@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/b6982e7adf.js" crossorigin="anonymous"></script>
+    <title>Weather Tracker - Home</title>
+</head>
+<body class="d-flex align-items-center py-4 bg-body-tertiary">
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<div class="container min-vh-100">
+    <div class="container-fluid" style="margin-top: 7vh;">
+        <div class="container text-center">
+            <h2>Отслеживаемые города</h2>
+            <span th:if="${error}" th:text="${error}" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div th:each="location: ${locations}" class="card m-2" style="width: 25rem">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-10">
+                                <h4 th:text="${location.getName()}" class="card-title">Location</h4>
+                                <h6 th:text="${#temporals.format(location.getDt(), 'HH:mm')}" class="text-muted card-subtitle mb-3">Time</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row mb-2">
+                            <div class="col-md-6 text-start align-self-center">
+                                <img alt="weather-image" class="card-img-top" th:src="@{'/img/' + ${location.getIcon()} + '.svg'}">
+                            </div>
+                            <div class="col-md-6 text-end align-self-center">
+                                <h1 th:text="${#numbers.formatDecimal(location.getTemp(), 1, 1, 'POINT')} + '°C'" class="text-primary">+12°C</h1>
+                                <p th:text="'Ощущается как ' + ${#numbers.formatDecimal(location.getFeelsLike(),1,1,'POINT')} + '°C'">Ощущается как -12°C</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p th:text="${#strings.capitalize(location.getDescription())}" class="fs-5 fw-semibold">CAPITALIZE</p>
+                    <div class="container mb-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <i class="fas fa-temperature-low"
+                                           style="margin-right: 4px;width: 20px;"></i>
+                                        <span th:text="${#numbers.formatDecimal(location.getTempMin(), 1, 1, 'POINT')} + '°C'">12°C</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fas fa-cloud"
+                                           style="margin-right: 4px;width: 20px;padding: 0px;font-size: 14px;"></i>
+                                        <span th:text="${location.getCloudiness()} + '%'" >11%</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fas fa-wind" style="margin-right: 5px;width: 20px;"></i>
+                                        <span th:text="${location.getWindSpeed()} + ' м/с'">11 м/с</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <svg class="bi bi-sunrise" fill="currentColor" height="1em"
+                                             style="margin-right: 7px;width: 20px;margin-left: -2px;"
+                                             viewBox="0 0 16 16" width="1em"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                    d="M7.646 1.146a.5.5 0 0 1 .708 0l1.5 1.5a.5.5 0 0 1-.708.708L8.5 2.707V4.5a.5.5 0 0 1-1 0V2.707l-.646.647a.5.5 0 1 1-.708-.708l1.5-1.5zM2.343 4.343a.5.5 0 0 1 .707 0l1.414 1.414a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707zm11.314 0a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM8 7a3 3 0 0 1 2.599 4.5H5.4A3 3 0 0 1 8 7zm3.71 4.5a4 4 0 1 0-7.418 0H.499a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10zm13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z">
+                                            </path>
+                                        </svg>
+                                        <span th:text="${#temporals.format(location.getSunrise(), 'HH:mm:ss')}">12:00</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <i class="fas fa-temperature-high"
+                                           style="margin-right: 0px;width: 20px;"></i>
+                                        <span th:text="${#numbers.formatDecimal(location.getTempMax(), 1, 1, 'POINT')} + '°C'">-11°C</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fa-solid fa-droplet" style="margin-right: 0px;width: 20px;"></i>
+                                        <span th:text="${#numbers.formatInteger(location.getHumidity(), 1)} + '%'">11%</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fas fa-angle-double-down"
+                                           style="margin-right: 0px;width: 20px;"></i>
+                                        <span th:text="${#numbers.formatInteger(location.getPressure(), 1)} + ' ГПа'">12</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <svg class="bi bi-sunset" fill="currentColor" height="1em"
+                                             style="margin-right: 5px;width: 20px;margin-left: -5px;"
+                                             viewBox="0 0 16 16" width="1em"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                    d="M7.646 4.854a.5.5 0 0 0 .708 0l1.5-1.5a.5.5 0 0 0-.708-.708l-.646.647V1.5a.5.5 0 0 0-1 0v1.793l-.646-.647a.5.5 0 1 0-.708.708l1.5 1.5zm-5.303-.51a.5.5 0 0 1 .707 0l1.414 1.413a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707zm11.314 0a.5.5 0 0 1 0 .706l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM8 7a3 3 0 0 1 2.599 4.5H5.4A3 3 0 0 1 8 7zm3.71 4.5a4 4 0 1 0-7.418 0H.499a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10zm13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z">
+                                            </path>
+                                        </svg>
+                                        <span th:text="${#temporals.format(location.getSunset(), 'HH:mm:ss')}">12:00</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container mb-3">
+                        <div class="row">
+                        <form th:action="@{/forecast}" method="get" class="col-md-6 text-start">
+                            <input name="name" th:value="${location.getName()}" type="hidden">
+                            <input name="lat" th:value="${location.getLat()}" type="hidden">
+                            <input name="lon" th:value="${location.getLon()}" type="hidden">
+                            <button class="btn btn-primary">Подробнее</button>
+                        </form>
+                        <form th:action="@{/del-location}" method="post" class="col-md-6 text-end">
+                            <input name="name" th:value="${location.getName()}" type="hidden">
+                            <input name="lat" th:value="${location.getLat()}" type="hidden">
+                            <input name="lon" th:value="${location.getLon()}" type="hidden">
+                            <button class="btn btn-danger">Удалить</button>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+version: '3.9'
+services:
+  weather-tracker:
+    image: weather-tracker
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: WeatherTracker
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
